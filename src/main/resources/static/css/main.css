@@ -1,0 +1,47 @@
+html{
+    font-size: 20px;
+}
+
+body{
+    color: #3d4145;
+
+}
+
+.loginBar{
+    width: 100%;
+    /*margin:0.1rem;*/
+    margin-top:30%;
+}
+
+.loginCell::before{
+    border-top: 1px solid #d9d9d9;
+
+}
+
+.loginCell{
+    /*height: 2rem;*/
+    /*background-color: aquamarine;*/
+    border-bottom: 1px solid #d9d9d9;
+    /*padding: 10px 15px;*/
+    align-items: center;
+
+}
+
+.login_input{
+    display: block;
+    line-height: 1.5rem;
+    width: 100%;
+    font-size: .8rem;
+    border: 0;
+    outline: 0;
+    vertical-align: middle;
+}
+
+.btn{
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    display: inline-block;
+    position: relative;
+    margin: 0.2rem 1rem;
+}
+

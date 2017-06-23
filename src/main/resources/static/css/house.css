@@ -1,0 +1,95 @@
+html{
+    font-size: 20px;
+}
+
+body{
+    margin: 0;
+    background: white;
+    outline: 0;
+}
+
+*{
+    padding: 0;
+}
+
+.container{
+
+}
+
+.house-list{
+
+
+}
+
+.house-list .houses-item{
+
+    position: relative;
+    overflow: hidden;
+}
+
+.house-img{
+    position: relative;
+
+}
+
+.house-img img{
+    width:100%;
+}
+
+.house-img .house-price{
+    font-size: .5rem;
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    bottom: 6px;
+
+}
+a{
+    display: inline-block;
+}
+
+.house-price {
+    color:  white;
+    padding: .2rem .5rem;
+}
+
+.house-price .fs30 {
+    color:  white;
+    font-size: 1rem;
+}
+
+.house-detail{
+    padding: .5rem .7rem;
+}
+
+.house-detail p{
+    font-size: 0.7rem;
+    margin:0 0.3rem ;
+}
+
+.house-detail .house-title{
+    font-weight:600;
+}
+
+.house-detail .house-desc{
+    color: #666;
+    font-size: 0.5rem;
+}
+
+.house-detail .house-mark{
+    display: inline-block;
+    background: #82c8a0;
+    color: white;
+    height: .8rem;
+    line-height: 0.8rem;
+    border-radius: 0.4rem;
+    font-size: 0.5rem;
+    padding: 0 .5rem;
+    margin-left: 0.3rem;
+}
+
+
+
+
+
+
+

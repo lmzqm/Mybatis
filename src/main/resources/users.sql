@@ -1,0 +1,19 @@
+SET FOREIGN_KEY_CHECKS=0;
+
+--
+--  Table Structure for `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users`(
+  `id`  INT(10) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `username` VARCHAR(32) DEFAULT NULL COMMENT '用户名',
+  `password` VARCHAR(32) DEFAULT NULL COMMENT '密码',
+  `sex` VARCHAR(32) DEFAULT NULL COMMENT '性别',
+  `nick_name` VARCHAR(32) DEFAULT NULL COMMENT '别名',
+  PRIMARY KEY (`id`)
+)ENGINE = InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET = utf8;
+
+
+

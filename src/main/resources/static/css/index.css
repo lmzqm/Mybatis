@@ -1,0 +1,132 @@
+html{
+    font-size: 20px;
+
+}
+
+body{
+
+    color: white;
+    margin: 0;
+    font-family: Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Helvetica Neue,Helvetica,Arial,sans-serif;
+    background: #333;
+    font-size: 0.6rem;
+    display: block;
+
+}
+
+*{
+    border:0;
+    outline: none;
+    /*overflow: hidden;*/
+}
+
+.container{
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.player{
+    background: #000;
+    height:10rem;
+    width: 100%;
+    position: relative;
+}
+
+.player video,.player div{
+    width: 100%;
+    height:100%;
+    position: absolute;
+}
+
+.player .cover{
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    background-image: url("http://img.kaiyanapp.com/6e85b5234230fd6ead2da2168a44308a.png?imageMogr2/quality/60/format/jpg");
+
+}
+
+.player .play-button{
+    background-image: url("http://static.kaiyanapp.com/eyepetizer-web/assets/images/detail/icon_play@2x.3b9f9ba5.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px 60px;
+    background-color: rgba(0,0,0,0.15);
+}
+
+.video_info{
+    position: relative;
+}
+
+.driver{
+    /*width: auto;*/
+    height: 1px;
+    margin-bottom: 7px;
+    background-color: #fff;
+
+}
+
+.driver-shot{
+    width: 2rem;
+}
+
+.video_info h1{
+    font-size: 1rem;
+}
+
+.video_detail{
+    background-color: rgba(0,0,0,.20);
+    padding:0.75rem;
+    padding-bottom: 0.2rem;
+}
+
+.video_detail p{
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.video_detail .desctiption{
+    opacity: .85;
+}
+
+.downer{
+    height: 70px;
+}
+
+.video_list_position{
+    padding: 20px 15px 20px;
+    background: rgba(0,0,0,0.4);
+}
+
+.video_list_position .relate_video{
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.video_list_position .relate_video .cover {
+    background-image: url("http://img.kaiyanapp.com/2c75e6aae4e3495a31f70b8f749105b7.jpeg?imageMogr2/quality/60/format/jpg/thumbnail/300x/interlace/1");
+    background-position: 50%;
+    background-size: cover;
+    width: 40%;
+    padding-top: 25%;
+
+}
+
+ .relate_video .meta{
+    position: absolute;
+     margin-left: 15px;
+     left: 40%;
+     top: 50%;
+     transform: translateY(-50%);
+
+}
+
+ .meta .title{
+     margin-bottom: 0.5rem;
+     font-weight: 700;
+ }
+
+ .meta .category{
+     font-size: 0.5rem;
+ }
+
