@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue 组建化</title>
+    <!--<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>-->
+    <style>
+
+        * {
+            font-family: simhei, Helvetica, Arial, sans-serif;
+        }
+
+        #dialog-template{
+            display: none;
+        }
+
+        .btn {
+            display: inline-block;
+            border: 0;
+            box-sizing: border-box;
+            background: #cb4a70;
+            color: #fff;
+            font-size: 1.5em;
+            border-radius: .1em;
+            line-height: 2em;
+            padding: 0 1em;
+            transition: .4s ease-out;
+            border: 1px solid #cb4a70;
+            outline: 0;
+            text-decoration: none;
+        }
+
+        .btn:hover,
+        .btn:focus {
+            background: #fff;
+            color: #cb4a70;
+            cursor: pointer;
+            transition: .15s ease-in;
+        }
+
+        .btn-open {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .dialog {
+            width: 480px;
+            position: fixed;
+            left: 50%;
+            top: 2em;
+            transform: translateX(-50%);
+            z-index: 2000;
+            visibility: hidden;
+            backface-visibility: hidden;
+            perspective: 1300px;
+        }
+
+        .dialog-active {
+            visibility: visible;
+        }
+
+        .dialog-active .dialog-content {
+            position: relative;
+            opacity: 1;
+            transform: rotateY(0);
+        }
+
+        .dialog-active ~ .dialog-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dialog-content {
+            border-radius: 3px;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: .5s ease-in-out;
+            opacity: 0;
+            transform-style: preserve-3d;
+            transform: rotateY(-70deg);
+        }
+
+        .dialog-header {
+            background: #cb4a70;
+            color: #fff;
+        }
+
+        .dialog-title {
+            margin: 0;
+            font-size: 2em;
+            text-align: center;
+            font-weight: 200;
+            line-height: 2em;
+        }
+
+        .dialog-body {
+            padding: 2em;
+        }
+
+        .dialog-footer {
+            margin: 0 2em;
+            padding: 2em 0;
+            text-align: right;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dialog-overlay {
+            content: "";
+            position: fixed;
+            visibility: hidden;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            opacity: 0;
+            background: rgba(0, 0, 0, 0.5);
+            transition: all .6s;
+        }
+
+        .close {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            position: absolute;
+            top: .5rem;
+            right: .5rem;
+            transition: .8s ease all;
+            -moz-transition: .8s ease all;
+            -webkit-transition: .8s ease all;
+            border: none;
+            border-radius: 3px;
+            color: #333;
+            text-decoration: none;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .close:hover {
+            transition: .8s ease all;
+            -moz-transition: .8s ease all;
+            -webkit-transition: .8s ease all;
+        }
+
+        .close .iconfont {
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .rotate {
+            cursor: pointer;
+        }
+
+        .rotate:hover {
+            transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            transition: transform 1.0s ease all;
+            -moz-transition: -moz-transform 1.0s ease all;
+            -webkit-transition: -webkit-transform 1.0s ease all;
+        }
+
+    </style>
+    <script type="text/javascript" src="../webjars/vue/2.1.3/vue.min.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <my-conponent></my-conponent>
+        <my-componey2></my-componey2>
+    </div>
+
+    <div id="app1">
+        <my-componey2></my-componey2>
+    </div>
+
+    <div id="parent">
+        <parent-component></parent-component>
+    </div>
+
+    <div id="scriptId">
+        <my-scomponent></my-scomponent>
+    </div>
+
+    <div id="props">
+        <my-props v-bind:my-name="name" v-bind:my-age="age"></my-props>
+    </div>
+
+    <!--编译的作用域-->
+    <div id="zyy">
+        <my-zyy>
+            <h2>Hello Vue.js!</h2>
+        </my-zyy>
+    </div>
+
+    <script type="text/x-template" id="myComponent">
+        <div> This is a script component! </div>
+    </script>
+
+
+
+    <template id="temp">
+        <div>THis is a template {{a}}</div>
+    </template>
+
+    <div id="dialog">
+        <modal-dialog :show="show">
+            <header class="dialog-header" slot="header">
+                <h1 class="dialog-title">提示信息</h1>
+            </header>
+            <div class="dialog-body" slot="body">
+                <p>你想在对话框中放入什么内容</p>
+                <p>你可以放一段文字，也可以放一些表单，或者一些图片</p>
+            </div>
+            <!--<footer class="dialog-footer" slot="footer">-->
+                <!--<button class="btn" @click="closeDialog">关闭</button>-->
+            <!--</footer>-->
+        </modal-dialog>
+        <button class="btn btn-open" @click="openDialog">打开对话框</button>
+    </div>
+
+    <template id="templates">
+        <table>
+            <tr>
+                <th colspan="2">子组件数据</th>
+
+            </tr>
+            <tr>
+                <td>my name</td>
+                <td>{{myName}}</td>
+            </tr>
+            <tr>
+                <td>my age</td>
+                <td>{{myAge}}</td>
+            </tr>
+        </table>
+    </template>
+
+    <template id="zyyt">
+        <div>
+            <slot>如果没有分发内容的话，就就会显示slot中的内容</slot>
+            <h2>{{msg}}</h2>
+            <button @click="showMsg">显示消息</button>
+        </div>
+    </template>
+
+    <template id="dialog-template">
+        <div class="dialogs">
+            <div class="dialog" :class="{'dialog-active':show}">
+                <div class="dialog-content">
+
+                    <div class="close rotate">
+                        <span class="iconfont icon-close" @click="close"></span>
+                    </div>
+                    <slot name="header"></slot>
+                    <slot name="body"></slot>
+                    <slot name="footer"></slot>
+
+                </div>
+            </div>
+            <div class="dialog-overlay"></div>
+        </div>
+    </template>
+
+    <script>
+        Vue.component('modal-dialog',{
+            template:'#dialog-template',
+            props:['show'],
+            methods:{
+                close:function () {
+                    this.show = false
+                }
+            },
+            data:function () {
+
+            }
+        })
+
+        new Vue({
+            el:'#dialog',
+            data:{
+                show:false
+            },
+            methods:{
+                openDialog:function () {
+                    this.show = true
+                },
+                closeDialog:function () {
+                    this.show = false
+                }
+            }
+        })
+    </script>
+
+    <script>
+        <!---->
+        <!--创建一个组件构造器-->
+        var myComponent = Vue.extend({
+            template:'<div>This is My first Component!</div>'
+        })
+
+        <!--注册一个组件-->
+        Vue.component('my-conponent',myComponent)
+
+        new Vue({
+            el:'#app'
+        })
+
+        <!--创建一个局部的组件-->
+        var myComponey1 = Vue.extend({
+            template:'<div>This is the secound Componey</div>'
+        })
+
+        <!--构建局部的组件-->
+        new Vue({
+            el:'#app1',
+            components:{
+                'my-componey2':myComponey1
+            }
+
+        })
+
+        <!--创建一个父子组件-->
+
+        var Child = Vue.extend({
+            template:'<p>This is a child Component!</p>'
+        })
+
+
+        var Parent = Vue.extend({
+            template:'<p>This is a Parent Component</p><child-component></child-component>',
+            components:{
+                'child-component':Child
+            }
+        })
+
+        Vue.component('parent-component',Parent)
+
+        new Vue({
+            el:'#parent'
+        })
+
+        <!--使用Script标签-->
+    </script>
+
+    <script>
+        <!--使用SCript 标签-->
+
+        Vue.component('my-scomponent',{
+            template:'#temp',
+            data:function () {
+                return{a:'new test'}
+            }
+        })
+
+        new Vue({
+            el:'#scriptId'
+        })
+    </script>
+
+    <script>
+        var vm = new Vue({
+            el:"#props",
+            data:{
+                name:'lmzqm',
+                age:28
+            },
+            components:{
+                'my-props':{
+                    template:'#templates',
+                    props:['myName','myAge']
+                }
+            }
+
+        })
+    </script>
+
+    <!--创建作用域-->
+    <script>
+        new Vue({
+            el:'#zyy',
+            components:{
+                'my-zyy':{
+                    template:'#zyyt',
+                    data:function(){
+                        return {
+                            msg:'This is a componey'
+                        }
+                    },
+                    methods:{
+                        showMsg:function () {
+                            alert(this.msg)
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+
+    <!--父子组件之间的访问-->
+    <!--1.$children-->
+
+    <div id="accept">
+        <children1></children1>
+        <children2></children2>
+        <button @click="showChildren">显示子控件</button>
+    </div>
+
+    <template id="child1">
+        <h2>{{message}}</h2>
+    </template>
+
+    <template id="child2">
+        <h2>{{message}}</h2>
+    </template>
+
+    <script>
+
+
+
+        new Vue({
+            el:'#accept',
+            components:{
+                'children1':{
+                    template:'#child1',
+                    data:function () {
+                       return {
+                           message:'first children'
+                       }
+                    }
+                },
+                'children2':{
+                    template:'#child2',
+                    data:function () {
+                        return {
+                            message:'secound children'
+                        }
+                    }
+                }
+            },
+            methods:{
+                showChildren:function () {
+                    for(var i = 0; i<this.$children.length;i++) {
+                        alert(this.$children[i].message)
+                    }
+                }
+            }
+
+        })
+    </script>
+
+    <!--使用ref示例-->
+    <div id="accept2">
+        <children1 v-ref:cc1></children1>
+        <children2 v-ref:cc2></children2>
+        <button @click="showChildren">显示子控件2</button>
+    </div>
+
+    <template id="child12">
+        <h2>{{message}}</h2>
+    </template>
+
+    <template id="child22">
+        <h2>{{message}}</h2>
+    </template>
+
+    <script>
+
+
+
+        new Vue({
+            el:'#accept2',
+            components:{
+                'children12':{
+                    template:'#child12',
+                    data:function () {
+                        return {
+                            message:'first children'
+                        }
+                    }
+                },
+                'children22':{
+                    template:'#child22',
+                    data:function () {
+                        return {
+                            message:'secound children'
+                        }
+                    }
+                }
+            },
+            methods:{
+                showChildren:function () {
+//                    for(var i = 0; i<this.$children.length;i++) {
+//                        alert(this.$children[i].message)
+//                    }
+                    alert(this.$refs.cc1.message);
+                    alert(this.$refs.cc2.message);
+                }
+            }
+
+        })
+    </script>
+
+    <!--$parent示例-->
+    <div id="parent-accept">
+        <parentaccept></parentaccept>
+    </div>
+
+    <template id="parentelement">
+        <div><children></children></div>
+    </template>
+
+    <template id="children1">
+        <div>
+            <h2>THis is a children</h2>
+            <button @click="showParentData">显示父控件信息</button>
+        </div>
+    </template>
+
+    <script>
+        Vue.component('parentaccept',{
+            template:'#parentelement',
+            data:function () {
+                return{
+                    message:'the parent message'
+                }
+            },
+            components:{
+                'children':{
+                    template:'#children1',
+                    methods:{
+                        showParentData:function () {
+                            alert(this.$parent.message)
+                        }
+                    }
+                }
+            }
+        })
+
+        new Vue({
+            el:'#parent-accept'
+        })
+    </script>
+
+    <!--派发事件-->
+    <div id="dispatch-event">
+       <p>Message:{{messages | json}}</p>
+        <child-ponson></child-ponson>
+    </div>
+
+    <template id="childperson">
+        <div>
+
+            <input v-model="msg" />
+            <button @click="notify">DispatchEvent</button>
+        </div>
+    </template>
+
+    <script>
+        Vue.component('child-ponson',{
+            template:'#childperson',
+            data:function () {
+              return{
+                  msg:''
+              }
+            },
+            methods:{
+                notify:function () {
+                    if(this.msg.trim()){
+                        this.$dispatch('child-msg',this.msg)
+                        this.msg = ''
+                    }
+                }
+            }
+        })
+
+        new Vue({
+            el:'#dispatch-event',
+            data:{
+                messages:[]
+            },
+            events:{
+                'child-msg':function (msg) {
+                    this.messages.push(msg)
+                }
+            }
+
+        })
+    </script>
+
+
+
+
+</body>
+
+</html>

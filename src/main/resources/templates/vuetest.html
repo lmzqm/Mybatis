@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">-->
+<head>
+    <meta charset="UTF-8">
+    <title>Hello world</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
+    <!--<script src="../static/js/vue.js"></script>-->
+</head>
+<body>
+    <!--这是我们的View-->
+    <div id="app">
+        <p>{{message}}</p>
+        <input type="text" v-model="message"/>
+        <!--v-if的指令操作-->
+        <h3 v-if="yes"> YES!</h3>
+        <h3 v-if="yes">NO!</h3>
+        <h3 v-if="age > 25">Age:{{age}}</h3>
+        <h3 v-else>没有no 就有我</h3>
+
+        <!--v-show的指令操作-->
+        <!--<h3 v-show="yes"> YES!</h3>-->
+        <!--<h3 v-show="no">NO!</h3>-->
+
+        <!----------分割线------------>
+        <h3 v-show="age > 25">Age:{{age}}</h3>
+        <h3 v-else>年龄小于25的处理啊啦</h3>
+
+        <!------v-for语句-------->
+        <h3 v-for="person in persons">{{person}}</h3>
+
+    </div>
+
+    <div id="bind">
+        <ul class="pagination">
+            <li v-for="n in pageCount">
+                <a  :class="activiteNumber === n +1 ? 'activity' : '' ">{{n}}</a>
+            </li>
+
+            <button @click="greet">Greet</button>
+            <button @click="say('hi')">HI</button>
+        </ul>
+    </div>
+
+    <script>
+        <!--这是我们的model-->
+        var examplateData = {
+                message:'Hello world!',
+                age:28,
+                yes:true,
+                no:false,
+                persons:["lmzqm","hello","world"]
+        }
+        /*
+         *   这是一个Vue的实例 或者是ViewModel
+         *   它是链接VIew 和 Model的
+         * */
+        var vm = new Vue({
+            el:'#app',
+            data:examplateData
+        })
+
+        var forData = {
+            pageCount:10,
+            activiteNumber:1,
+            message:'new message'
+
+        }
+
+        var bind = new Vue({
+            el:'#bind',
+            data:forData,
+            methods : {
+                greet:function(){
+                    alert(this.message)
+                },
+                say:function (msg) {
+                    alert(msg)
+                }
+            }
+        })
+
+
+
+        /*
+        * 使用Vue的过程就是定义MVVM各个组成部分的过程的过程
+        *
+        * 1.定义View
+        * 2.定义Model
+        * 3.创建一个Vue的实例或者"ViewModel",它是用于连接View和Model的
+        * 在创建Vue的实例的时候，要传入一个选项对象，选项对象可以包含数据，挂载元素，方法，摸生命周期钩子等待
+        * 在这个实例中 选项对象的el属性指向View，el:'#app'表示该Vue的实例将挂载到<div id="app"></div>这个元素
+        * data数据指向Model,data:exampleData表示我们的Model是exampleData对象
+        *
+        * Vue.js有多种数据绑定的语法，最基础的形式是将文本插值 ，使用一个大括号语法，在运行时{{message}}会被数据对象中的message给替换
+        *
+        * */
+    </script>
+</body>
+</html>

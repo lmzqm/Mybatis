@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.ActivityMapper">
+
+    <resultMap id="simpleActivity" type="SimpleActivity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"></result>
+        <result column="address_district" property="district" jdbcType="VARCHAR"/>
+        <result column="recruit_person_num" property="recruitPersonNumber" jdbcType="INTEGER"/>
+        <result column="picture" property="picture" jdbcType="VARCHAR"/>
+        <result column="coord_long" property="longtitude" jdbcType="DOUBLE"/>
+        <result column="coord_lat" property="latitude" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="Activity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="address_city" property="addressCity" jdbcType="VARCHAR"/>
+        <result column="address_district" property="addressDistrict" jdbcType="VARCHAR"/>
+        <result column="address_street" property="addressStreet" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="coord_long" property="coordLong" jdbcType="DOUBLE"/>
+        <result column="coord_lat" property="coordLat" jdbcType="DOUBLE"/>
+        <result column="service_type" property="serviceType" jdbcType="VARCHAR"/>
+        <result column="service_object" property="serviceObject" jdbcType="VARCHAR"/>
+        <result column="recruit_time" property="recruitTime" jdbcType="VARCHAR"/>
+        <result column="recruit_person_num" property="recruitPersonNumber" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+        <result column="principal_name" property="principalName" jdbcType="VARCHAR"/>
+        <result column="principal_contack" property="principaContact" jdbcType="VARCHAR"/>
+        <result column="activity_status_id" property="activityStatusId" jdbcType="INTEGER"/>
+        <result column="working_hours" property="workingHours" jdbcType="DOUBLE"/>
+        <result column="timestamp" property="timestamp" jdbcType="TIMESTAMP"/>
+        <result column="picture" property="picture" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="INTEGER"/>
+        <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="LONGVARBINARY"/>
+    </resultMap>
+
+    <resultMap id="ActivityResultMap" type="ActivityDetail" extends="BaseResultMap">
+        
+        <association property="activityStatus" column="activity_status_id" javaType="ActivityStatus" select="com.lmzqm.mybatis.Mapper.ActivityStatusMapper.selectByPrimaryKey">
+
+        </association>
+        
+        <collection property=""
+
+    </resultMap>
+
+    <resultMap id="StatusResultMap" type="ActivityStatus">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="description" jdbcType="VARCHAR" property="desc"/>
+    </resultMap>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="StatusResultMap">
+        SELECT * FROM activity_status WHERE id = #{id}
+    </select>
+
+
+
+    <sql id="groupByAndOrderBySql">
+        GROUP BY
+        activity.id
+        ORDER BY
+        activity.timestamp
+    </sql>
+
+    <sql id="getActivityStatusActivite">
+        <where>
+            AND activity_status_id = #{status,jdbcType=INTEGER}
+        </where>
+    </sql>
+
+    <select id="selectHomeActivitys" resultMap="simpleActivity">
+        SELECT
+        *
+        FROM
+        activity
+        <include refid="getActivityStatusActivite"/>
+        <include refid="groupByAndOrderBySql" />
+    </select>
+
+    <select id="getActivityInfoById" parameterType="java.lang.Integer" resultMap="ActivityResultMap">
+        SELECT
+        *
+        FROM
+        activity
+        WHERE
+        id = #{id}
+        AND activity_status_id = 1
+        <include refid="groupByAndOrderBySql" />
+    </select>
+
+    <insert id="addNewActivityInfo" parameterType="Activity">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT  INTO activity
+        (
+          address_provice,
+          address_city,
+          address_district,
+          address_street,
+          address,
+          coord_long,
+          coord_lat,
+          service_type,
+          service_object,
+          recruit_time,
+          recruit_person_num,
+          name,
+          description,
+          time,
+          principal_name,
+          principal_contack,
+          activity_status_id,
+          working_hours,
+          timestamp,
+          picture,
+          code,
+          organization_id,
+          tribe_id,
+        )
+        VALUES
+        (
+          #{addressProvice,jdbcType=VARCHAR},
+          #{addressCity,jdbcType=VARCHAR},
+          #{addressDistrict,jdbcType=VARCHAR},
+          #{addressStreet,jdbcType=VARCHAR},
+          #{address,jdbcType=VARCHAR},
+          #{coordLong,jdbcType=DOUBLE},
+          #{coordLat,jdbcType=DOUBLE},
+          #{serviceType,jdbcType=VARCHAR},
+          #{serviceObject,jdbcType=VARCHAR},
+          #{recruitTime,jdbcType=VARCHAR},
+          #{recruitPersonNumber,jdbcType=INTEGER},
+          #{name,jdbcType=VARCHAR},
+          #{description,jdbcType=LONGVARBINARY},
+          #{time,jdbcType=VARCHAR},
+          #{principalName,jdbcType=VARCHAR},
+          #{principaContact,jdbcType=VARCHAR},
+          #{activityStatusId,jdbcType=INTEGER},
+          #{workingHours,jdbcType=DOUBLE},
+          #{timestamp,jdbcType=TIMESTAMP},
+          #{picture,jdbcType=VARCHAR},
+          #{code,jdbcType=INTEGER},
+          #{organizationId,jdbcType=INTEGER},
+          #{tribeId,jdbcType=INTEGER}
+        )
+    </insert>
+</mapper>

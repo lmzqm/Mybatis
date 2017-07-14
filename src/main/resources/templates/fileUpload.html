@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传和下载</title>
+    <script type="text/javascript" src="../webjars/vue/2.1.3/vue.min.js"></script>
+    <!--<script type="text/javascript" src="../webjars/vue/2.1.3/vue."></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+</head>
+<body>
+    <h2>文件上传实例</h2>
+    <form method="POST" enctype="multipart/form-data" action="/upload">
+        <p>文件：<input type="file" name="file"/></p>
+        <p>
+            <input type="submit" value="上传"/>
+        </p>
+    </form>
+
+    <h2>批量文件上传示例</h2>
+    <br>
+    <form method="POST" enctype="multipart/form-data" action="/upload/batch">
+        <p>文件1：<input type="file" name="file"/></p>
+        <p>文件2：<input type="file" name="file"/></p>
+        <p>文件3：<input type="file" name="file"/></p>
+
+        <p>
+            <input type="submit" value="上传"/>
+        </p>
+    </form>
+
+    <div id="app">
+        <request></request>
+    </div>
+
+    <template id="template">
+        <div>
+            <button @click="getRequest">get请求</button>
+            <button @click="postRequest">Post 请求</button>
+        </div>
+    </template>
+
+    <!--<script src="webjars/jquery/3.1.1/jquery.min.js"></script>-->
+    <script>
+        function AjaxHelper() {
+            this.ajax = function (url, type, dataType, data, callback) {
+                $.ajax({
+                    url:url,
+                    type:type,
+                    dataType:dataType,
+                    data:data,
+                    success:callback,
+                    error:function (xhr,errorType,error) {
+                        alert('Ajax request error:errorType:'+errorType+',error'+error)
+                    }
+                })
+            }
+        }
+
+        AjaxHelper.prototype.getReq = function(url,data,callback) {
+            this.ajax(url,'GET','json',data,callback)
+        }
+
+        AjaxHelper.prototype.postReq = function(url,data,callback) {
+            this.ajax(url,'POST','json',data,callback)
+        }
+
+        AjaxHelper.prototype.constructor = AjaxHelper
+
+        var ajaxHelper = new AjaxHelper()
+
+        Vue.component('request',{
+            template:'#template',
+            methods:{
+                getRequest:function () {
+//                    var url = 'http://localhost:8080/users/1'
+//                    ajaxHelper.getReq(url,null,function (data) {
+//                        alert("success ful"+ data.parseJSON)
+//
+//                    })
+                    this.$http.get
+                },
+                postRequest:function () {
+                    var url = 'http://localhost:8080/users/add'
+                    var data = {'sex':'MAN','userName':'lmzqm','passWord':'789234','nickName':'dkkdkd'}
+                    ajaxHelper.postReq(url,data,function (data) {
+                        alert('successful')
+                    })
+                }
+            }
+        })
+
+        new Vue({
+            el:'#app'
+        })
+
+
+    </script>
+
+
+
+</body>
+</html>
