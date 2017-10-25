@@ -7,6 +7,8 @@ import com.lmzqm.mybatis.Exception.MyException;
 import com.lmzqm.mybatis.Mapper.UserMapper;
 import com.lmzqm.mybatis.Server.MailServer;
 import com.lmzqm.mybatis.Server.PushServer;
+import com.lmzqm.mybatis.Server.TokenServer;
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by lmzqm on 2017/6/21.
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping(value = "/users")
 public class UserViewController {
 
     @Autowired
@@ -31,6 +34,9 @@ public class UserViewController {
 
     @Autowired
     private PushServer pushServer;
+
+    @Autowired
+    private TokenServer tokenServer;
 
     private static Logger logger = LoggerFactory.getLogger(UserViewController.class);
 
@@ -103,6 +109,27 @@ public class UserViewController {
     @GetMapping("/json")
     public String jsonError() throws MyException {
         throw new MyException("发生错误");
+    }
+
+    @GetMapping("/token")
+    public String getToken(){
+        Map<String,Object> claim = new HashMap<>();
+        claim.put("userName","lmzqm");
+        claim.put("userId",123);
+        logger.info("the claim is "+claim);
+        String token = tokenServer.getToken(claim);
+        logger.info("the token is "+token);
+        if(token == null || token.equals("")){
+            return null;
+        }
+        return token;
+    }
+
+    @GetMapping("/prase")
+    public void praseToken(){
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImxtenFtIiwidXNlcklkIjoxMjN9.BsOjyJ_XuLWH5iSGYGOZ-4w87q_ufUzHegcFcctJ7D8";
+        Claims claims =  tokenServer.praseToken(token);
+        logger.info("the claims id"+claims.toString());
     }
 
 }

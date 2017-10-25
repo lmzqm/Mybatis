@@ -122,5 +122,240 @@ INSERT  INTO  `activity_status` VALUES ('1','活动正在招募');
 INSERT INTO `activity_status` VALUES ('2','活动进行');
 INSERT INTO `activity_status` VALUES ('3','活动结束');
 
+#
+# DROP DATABASE IF EXISTS db_blog;
+#
+# create DATABASE db_blog DEFAULT CHARACTER SET utf8;
+#
+# USE db_blog;
+
+DROP TABLE  IF EXISTS `t_blogger`;
+CREATE TABLE `t_blogger`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '博主id',
+  `username` VARCHAR(255) NOT NULL COMMENT '博主名字',
+  `password` VARCHAR(100) NOT NULL COMMENT '博主密码',
+  `profile` TEXT COMMENT '博主信息',
+  `nick_name` VARCHAR(50) DEFAULT NULL COMMENT '博主昵称',
+  `sign` VARCHAR(255) DEFAULT NULL  COMMENT '博主签名',
+  `imageurl` VARCHAR(100) DEFAULT NULL  COMMENT '博主头像路径',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET = utf8;
+
+
+INSERT INTO `t_blogger` values('2','lmzqm','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('3','钟超','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('4','徐悦','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('5','阳光岛主','123123','阳光、快乐、创新.','IT-Homer','欢迎访问我的新博客： http://blog.mimvp.com','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('6','丁码农','123123','擅长大规模（高并发、高可用、海量数据）互联网架构','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('7','iter_zc','123123','关注互联网架构方向','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('8','java-er','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('9','patyer','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('10','NBAPlayer','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('11','FaceYoue','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('12','NO i Cane','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('13','张是一个中文','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('14','活动活动和','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('15','对的','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+INSERT INTO `t_blogger` values('16','没有听到','123123','爱哭爱闹爱开玩笑....','会飞的猪','新的时代，新的征程','http://avatar.csdn.net/7/8/4/1_xuyue1987.jpg');
+
+
+DROP TABLE  IF EXISTS `t_blog`;
+CREATE TABLE `t_blog`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '博客id',
+  `title` VARCHAR(255) NOT NULL COMMENT '博客的标题',
+  `content` TEXT COMMENT '博客的内容',
+  `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '博客发布时间',
+  `bloger_id` INT(11) NOT NULL DEFAULT '2' COMMENT '作者的ID',
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_blogger` FOREIGN KEY (`bloger_id`) REFERENCES `t_blogger` (`id`) ON DELETE NO ACTION
+)ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+INSERT INTO `t_blog` VALUES ('1001','Python 使用 os.fork() 创建子进程','Linux 操作系统提供了一个 fork() 函数用来创建子进程，这个函数很特殊，调用一次，返回两次，因为操作系统是将当前的进程（父进程）复制了一份（子进程），然后分别在父进程和子进程内返回。子进程永远返回0，而父进程返回子进程的 PID。我们可以通过判断返回值是不是 0 来判断当前是在父进程还是子进程中执行。在 Python 中同样提供了 fork() 函数，此函数位于 os 模块下。下面是一个例...',now(),2);
+INSERT INTO `t_blog` VALUES ('1002','SSH 首次登录太慢问题','这两天在使用 Docker 做测试，发现新建的容器在首次 ssh 登录的时候经常超时，我们简单将超时时间设置成60秒，但仍然会偶尔超时。所以简单延迟超时时间此路不通。于是想到是否可以通过修改 sshd 的参数，来解决问题。大概查了一下 SSH 登录太慢可能是 DNS 解析的问题，默认配置 ssh的 初次接受 ssh 连接时会自动反向解析客户端 IP 地址以得到 ssh 客户端的主机名。如果此时 DN...',now(),2);
+INSERT INTO `t_blog` VALUES ('1003','我们为什么要使用AOP？','谢谢 前言 一年半前写了一篇文章Spring3：AOP，是当时学习如何使用Spring AOP的时候写的，比较基础。这篇文章最后的推荐以及回复认为我写的对大家有帮助的评论有很多，但是现在',now(),2);
+INSERT INTO `t_blog` VALUES ('1004','Java虚拟机14：Java对象大小、对象内存布局及锁状态变化','摘要: 一个对象占多少字节？ 关于对象的大小，对于C/C++来说，都是有sizeof函数可以直接获取的，但是Java似乎没有这样的方法。不过还好，在JDK1.5之后引入了Instrumentation类，这个类提供了计算对象内存占用量的方法。至于具体Instrumentation类怎么用就不说了，可以参看这',now(),2);
+INSERT INTO `t_blog` VALUES ('1005','【MyBatis源码解析】MyBatis一二级缓存','MyBatis缓存 我们知道，频繁的数据库操作是非常耗费性能的（主要是因为对于DB而言，数据是持久化在磁盘中的，因此查询操作需要通过IO，IO操作速度相比内存操作速度慢了好几个量级），尤其是对于一些相同的查询语句，完全可以把查询结果存储起来，下次查询同样的内容的时候直接从内存中获取数据即可，这样在某',now(),2);
+INSERT INTO `t_blog` VALUES ('1006','【MyBatis源码分析】插件实现原理',' MyBatis插件原理 从<plugins>解析开始 本文分析一下MyBatis的插件实现原理，在此之前，如果对MyBatis插件不是很熟悉的朋友，可参看此文MyBatis7：MyBatis插件及示例 打印每条SQL语句及其执行时间，本文我以一个例子说明了MyBatis插件是什么以及如何实现。由于M',now(),2);
+INSERT INTO `t_blog` VALUES ('1007','【MyBatis源码分析】select源码分析及小结','示例代码 之前的文章说过，对于MyBatis来说insert、update、delete是一组的，因为对于MyBatis来说它们都是update；select是一组的，因为对于MyBatis来说它就是select。 本文研究一下select的实现流程，示例代码为： selectMailById方法的',now(),2);
+INSERT INTO `t_blog` VALUES ('1008','MyBatis7：MyBatis插件及示例----打印每条SQL语句及其执行时间',' Plugins 摘一段来自MyBatis官方文档的文字。 MyBatis允许你在某一点拦截已映射语句执行的调用。默认情况下，MyBatis允许使用插件来拦截方法调用 Executor（update、query、flushStatements、commint、rollback、getTransacti',now(),2);
+INSERT INTO `t_blog` VALUES ('1009','【MyBatis源码分析】insert方法、update方法、delete方法处理流程（下篇）','Configuration的newStatementHandler分析 SimpleExecutor的doUpdate方法上文有分析过： 这两天重看第5行的newStatementHandler方法的时候，发现方法上文在这个方法中分析地太简略了，这里过一遍一下Configuration的newSta',now(),2);
+INSERT INTO `t_blog` VALUES ('10010','TCP：三次握手、四次握手、backlog及其他','TCP是什么 首先看一下OSI七层模型： 然后数据从应用层发下来，会在每一层都加上头部信息进行封装，然后再发送到数据接收端，这个基本的流程中每个数据都会经过数据的封装和解封的过程，流程如下图所示： 在OSI七层模型中，每一层的作用和对应的协议如下图所示： 说回TCP，简单说TCP（Transmiss',now(),2);
+INSERT INTO `t_blog` VALUES ('10011','图解集合8：红黑树的移除节点操作',' 红黑树移除节点 上文详细讲解了红黑树的概念，红黑树的插入及旋转操作，根据测试代码建立起来的红黑树结构为： 本文先研究一下红黑树的移除操作是如何实现的，移除操作比较复杂，具体移除的操作要进行几次旋转和移除的节点在红黑树中的位置有关，这里也不特意按照旋转次数选择节点了，就找三种位置举例演示红黑树移除操作',now(),2);
+INSERT INTO `t_blog` VALUES ('10012','图解集合7：红黑树概念、红黑树的插入及旋转操作详细解读','原文地址http://www.cnblogs.com/xrq730/p/6867924.html，转载请注明出处，谢谢！ 初识TreeMap 之前的文章讲解了两种Map，分别是HashMap与LinkedHashMap，它们保证了以O(1)的时间复杂度进行增、删、改、查，从存储角度考虑，这两种数据结',now(),2);
+INSERT INTO `t_blog` VALUES ('10013','【MyBatis源码分析】insert方法、update方法、delete方法处理流程（上篇）',' 打开一个会话Session 前文分析了MyBatis将配置文件转换为Java对象的流程，本文开始分析一下insert方法、update方法、delete方法处理的流程，至于为什么这三个方法要放在一起说，是因为： 示例代码为这段： 首先关注的是第2行的代码，ssf是SqlSessionFactory，',now(),2);
+INSERT INTO `t_blog` VALUES ('10014','【MyBatis源码分析】Configuration加载（下篇）',' 元素设置 继续MyBatis的Configuration加载源码分析： 上回看到了第7行的<typeAlias>标签的解析，后面先暂时跳过<plugins>、<objectFactory>、<objectWrapperFactory>、<reflectorFactory>、<typeHandlers',now(),2);
+INSERT INTO `t_blog` VALUES ('10015','【MyBatis源码分析】Configuration加载（上篇）','config.xml解析为org.w3c.dom.Document 本文首先来简单看一下MyBatis中将config.xml解析为org.w3c.dom.Document的流程，代码为上文的这部分： 第3行的代码实现为： 相当于就是将输入的路径转换为一个字符输入流并返回。 接着继续看静态块第4行的',now(),2);
+
+
+
+DROP TABLE IF EXISTS `t_comment`;
+CREATE TABLE `t_comment`(
+  `c_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '评论id',
+  `blog_id` INT(11) NOT NULL COMMENT '外键链接相对应的blog',
+  `user_id` INT(11) NOT NULL COMMENT '评论者id',
+  `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `desc` VARCHAR(255) NOT NULL DEFAULT '暂时还么有评论' COMMENT '评论的信息',
+  PRIMARY KEY (`c_id`),
+  CONSTRAINT `fk_blog` FOREIGN KEY (`blog_id`) REFERENCES `t_blog` (`id`) ON DELETE NO ACTION,
+  CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `t_blogger` (`id`) ON DELETE NO ACTION
+)ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8;
+
+INSERT INTO `t_comment` VALUES ('2','1001','2',now(),'写的很详细，表达很透彻');
+INSERT INTO `t_comment` VALUES ('3','1001','3',now(),'请问这个图是用什么画的');
+INSERT INTO `t_comment` VALUES ('4','1001','4',now(),'模糊的 全清楚了 ！收藏了！');
+INSERT INTO `t_comment` VALUES ('5','1001','5',now(),'6666666');
+INSERT INTO `t_comment` VALUES ('6','1001','6',now(),'说的好!');
+INSERT INTO `t_comment` VALUES ('7','1001','7',now(),'您好博主，ArrayDequeTest的第一个输出顺序错误');
+INSERT INTO `t_comment` VALUES ('8','1001','8',now(),'ArrayDequeTest 第三个和第五和输出顺序也有误');
+
+INSERT INTO `t_comment` VALUES ('9','1002','2',now(),'很不错，很实用');
+INSERT INTO `t_comment` VALUES ('10','1002','3',now(),'可以可以，正好自己也在研究');
+INSERT INTO `t_comment` VALUES ('11','1002','4',now(),'看到博主的博文之后，理解更加深刻了');
+INSERT INTO `t_comment` VALUES ('12','1002','5',now(),'为什么你该开始学习编程了？');
+INSERT INTO `t_comment` VALUES ('13','1002','6',now(),'小printf的故事：什么是真正的程序员？');
+INSERT INTO `t_comment` VALUES ('14','1002','7',now(),'程序员的工作、学习与绩效');
+
+INSERT INTO `t_comment` VALUES ('15','1003','2',now(),'唱吧DevOps的落地，微服务CI/CD的范本技术解读');
+INSERT INTO `t_comment` VALUES ('16','1003','3',now(),'是框架自动生成的，是springfox-swagger-ui.jar包下的一个文件');
+INSERT INTO `t_comment` VALUES ('17','1003','4',now(),'404啊，没有错误信息，打开不了那个页面，这些页面是框架自动生成的吗');
+INSERT INTO `t_comment` VALUES ('18','1003','5',now(),'解决方法：swagger 版本升级2.5.2');
+INSERT INTO `t_comment` VALUES ('19','1003','6',now(),'把maven引用顺序调一下，把swagger放在 Feign前面引用');
+INSERT INTO `t_comment` VALUES ('20','1003','7',now(),'请问是否有不使用注解而是配置文件的方法，感觉注解太多比较臃肿。');
+
+
+DROP TABLE IF EXISTS `user_info`;
+
+CREATE TABLE `user_info`(
+  `user_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `name` VARCHAR(255) NOT NULL UNIQUE COMMENT '姓名 需要保证唯一性的操作',
+  `city` VARCHAR(255) DEFAULT NULL COMMENT '城市',
+  `phone` VARCHAR(20) DEFAULT NULL COMMENT '手机号码',
+  `avatar_url` VARCHAR(255) DEFAULT NULL COMMENT '用户头像',
+  PRIMARY KEY (`user_id`)
+)ENGINE = InnoDB AUTO_INCREMENT=200  DEFAULT CHARSET = utf8;
+
+INSERT INTO `user_info` VALUES ('220', '秋明_hhh', '深圳', '18271631256', 'http://www.xunluji.com/static/upload/images//20151108/20151108201119402.jpg');
+INSERT INTO `user_info` VALUES ('221', '宋慧乔', '深圳', '18271631259', 'http://xlj2015.image.alimmdn.com/test/2CB0FF56-B3D0-4ABF-A566-8DCD0D4746FD');
+INSERT INTO `user_info` VALUES ('222', '李俊PUWQ', '福建', '18680665708', 'http://wx.qlogo.cn/mmopen/0pygn8iaZdEcicKh86wSIlTcu24PIRt0wTz6xKrxkTRVD8ClPicYA034xFywBeA5d24B0I60TsxWYjhrOjw0amZxNBab6rVNQUV/0');
+INSERT INTO `user_info` VALUES ('223', '饭饭', null, '13760867720', 'http://xlj2015.image.alimmdn.com/xlj/659092100346989119.png?t=1461409060067');
+
+DROP TABLE IF EXISTS `focus`;
+
+CREATE TABLE `focus`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '关注的id',
+  `user_id` INT(11) DEFAULT NULL COMMENT '用户Id',
+  `focus_id` INT(11) DEFAULT NULL COMMENT '关注ID',
+  `focus_state` INT(2) DEFAULT '0' COMMENT '关注的状态 0 表示没关注 1 表示关注 2 表示互相关注',
+  `focus_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '关注的时间',
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_userid` FOREIGN KEY (`user_id`) REFERENCES user_info (`user_id`) ON DELETE NO ACTION ,
+  CONSTRAINT `fk_focusid` FOREIGN KEY (`focus_id`) REFERENCES user_info (`user_id`) ON DELETE NO ACTION
+)ENGINE = InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET =utf8;
+
+INSERT INTO `focus` VALUES ('1','220','221','1',now());
+INSERT INTO `focus` VALUES ('2','220','222','1',now());
+INSERT INTO `focus` VALUES ('3','220','223','1',now());
+INSERT INTO `focus` VALUES ('4','221','220','1',now());
+INSERT INTO `focus` VALUES ('5','221','221','1',now());
+INSERT INTO `focus` VALUES ('6','221','222','1',now());
+INSERT INTO `focus` VALUES ('7','220','223','1',now());
+
+# DROP TABLE IF EXISTS `focus_status`;
+# CREATE TABLE `focus_status`(
+#
+#   `id` INT(11) NOT NULL AUTO_INCREMENT,
+#   `description` VARCHAR(255) NOT NULL ,
+#   PRIMARY KEY (`id`)
+#
+# )ENGINE = InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET = utf8;
+#
+# INSERT INTO `focus_status` VALUES ('0','未关注');
+# INSERT INTO `focus_status` VALUES ('1','已关注');
+# INSERT INTO `focus_status` VALUES ('2','互相关注');
+
+-- ----------------------------
+-- 问题的表单，主要是存储表单的题目还有表单的选项已经表单的正确答案
+-- ----------------------------
+
+DROP TABLE IF EXISTS `questions`;
+
+CREATE TABLE `questions`(
+  `question_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '问题的id',
+  `question_title` VARCHAR(255) NOT NULL COMMENT '问题的题目',
+  `question_options` VARCHAR(255) NOT NULL COMMENT '问题的选项',
+  `question_current` TINYINT(1) NOT NULL COMMENT '正确的选项',
+  PRIMARY KEY (`question_id`)
+)ENGINE = InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET =utf8;
+
+INSERT INTO `questions` VALUES ('1','Java 中能创建 volatile 数组吗？','能 不能','1');
+INSERT INTO `questions` VALUES ('2','Java 中应该使用什么数据类型来代表价格？','使用BigDecimal  double 类型','2');
+
+
+-- ----------------------------
+-- 量表 量表中包含了标题，描述，状态，还有量表中的题目
+-- ----------------------------
+DROP TABLE IF EXISTS `scale`;
+
+CREATE TABLE `scale`(
+  `scale_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '量表的ID',
+  `scale_title` VARCHAR(255) NOT NULL COMMENT '量表的题目',
+  `scale_type` INT(11) NOT NULL COMMENT '量表的类型',
+  `scale_desc` VARCHAR(255) NOT NULL COMMENT '量表的描述',
+  `scale_status` INT(11) NOT NULL COMMENT '量表的状态',
+  `scale_questions` VARCHAR(255) NOT NULL COMMENT '量表的题目',
+  `scale_test_persons` INT(11) NOT NULL DEFAULT 1000 COMMENT '参加测试的人数',
+  PRIMARY KEY (`scale_id`),
+  CONSTRAINT `fk_type` FOREIGN KEY (`scale_type`) REFERENCES scale_type_t (`type_id`) ON DELETE NO ACTION,
+  CONSTRAINT `fk_status` FOREIGN KEY (`scale_status`) REFERENCES activity_status (`id`) ON DELETE NO ACTION
+)ENGINE =InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET = utf8;
+
+INSERT INTO `scale` VALUES ('1','步态与跌倒问卷','1','用于评估患者运动症状类病情情况','1','1,2','1000');
+INSERT INTO `scale` VALUES ('2','Berg平衡表','1','用于评估患者运动症状类病情情况','1','2,1','1001');
+INSERT INTO `scale` VALUES ('3','帕金森自主神经症状量表','1','用于评估患者运动症状类病情情况','1','1,2','1002');
+INSERT INTO `scale` VALUES ('4','Epworth嗜睡量表','2','用于评估患者运动症状类病情情况','1','1,2','1003');
+INSERT INTO `scale` VALUES ('5','国际不宁腿综合研究','2','用于评估患者运动症状类病情情况','1','1,2','1004');
+
+
+-- ----------------------------
+-- 量表的类型
+-- ----------------------------
+DROP TABLE IF EXISTS `scale_type_t`;
+
+CREATE TABLE `scale_type_t`(
+  `type_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '类型id',
+  `type_desc` VARCHAR(255) NOT NULL COMMENT '类型名称',
+  PRIMARY KEY (`type_id`)
+)ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8;
+
+INSERT INTO `scale_type_t` VALUES ('1','运动症状类量表');
+INSERT INTO `scale_type_t` VALUES ('2','非运动症状类量表');
+
+-- ----------------------------
+-- 用户的量表记录
+-- ----------------------------
+
+DROP TABLE IF EXISTS `scale_record`;
+
+CREATE TABLE `scale_record`(
+  `recordid` INT(11) NOT NULL AUTO_INCREMENT COMMENT '量表记录id',
+  `scaleid` INT(11) NOT NULL COMMENT '量表的ID',
+  `score` INT(11) NOT NULL COMMENT '量表分数',
+  `result` VARCHAR(255) NOT NULL COMMENT '量表的结论',
+  `record_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束答题的时间',
+  `datas` VARCHAR(255) NOT NULL COMMENT '量表的结果集合',
+  `userid` INT(11) NOT NULL COMMENT '用户的Id',
+  PRIMARY KEY (`recordid`),
+  CONSTRAINT `fk_scaleId` FOREIGN KEY (`scaleid`) REFERENCES scale (`scale_id`) ON DELETE NO ACTION,
+  CONSTRAINT `fk_user_record` FOREIGN KEY (`userid`) REFERENCES users (`id`) ON DELETE NO ACTION
+)ENGINE = InnoDB AUTO_INCREMENT= 1 DEFAULT CHARSET = utf8;
+
+INSERT INTO `scale_record` VALUES ('1','1','97','当前步态特征不显著',now(),'1,2','2')
+
+
+# 注意外键重名的问题会导致 022 (23000): Can't write; duplicate key in table
+
+
+
+
 
 

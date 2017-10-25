@@ -2,10 +2,12 @@ package com.lmzqm.mybatis.Entity;
 
 import com.lmzqm.mybatis.Enum.HttpCodeEnum;
 
+import java.io.Serializable;
+
 /**
  * Created by lmzqm on 2017/7/5.
  */
-public class ErrorInfo<T> {
+public class ErrorInfo<T> implements Serializable{
 
     private Integer code;
     private String message;

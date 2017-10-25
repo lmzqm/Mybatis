@@ -10,6 +10,7 @@
         <result column="picture" property="picture" jdbcType="VARCHAR"/>
         <result column="coord_long" property="longtitude" jdbcType="DOUBLE"/>
         <result column="coord_lat" property="latitude" jdbcType="DOUBLE"/>
+        <result column="description" property="desc" jdbcType="LONGVARBINARY"/>
     </resultMap>
 
     <resultMap id="BaseResultMap" type="Activity">
@@ -38,14 +39,29 @@
     </resultMap>
 
     <resultMap id="ActivityResultMap" type="ActivityDetail" extends="BaseResultMap">
-        
+
+        <association property="activityStatus" javaType="ActivityStatus">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="description" property="desc" jdbcType="VARCHAR"/>
+        </association>
+
+    </resultMap>
+
+    <resultMap id="ActivityInfoResultMap" type="ActivityDetail" extends="BaseResultMap">
+
         <association property="activityStatus" column="activity_status_id" javaType="ActivityStatus" select="com.lmzqm.mybatis.Mapper.ActivityStatusMapper.selectByPrimaryKey">
 
         </association>
-        
-        <collection property=""
 
     </resultMap>
+
+    <!--<resultMap id="ActivityStatusListResultMap" type="ActivityDetail" extends="BaseResultMap">-->
+        <!--<collection property="users" jdbcType="User">-->
+
+        <!--</collection>-->
+    <!--</resultMap>-->
+
+
 
     <resultMap id="StatusResultMap" type="ActivityStatus">
         <id column="id" property="id" jdbcType="INTEGER" />
@@ -55,8 +71,6 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="StatusResultMap">
         SELECT * FROM activity_status WHERE id = #{id}
     </select>
-
-
 
     <sql id="groupByAndOrderBySql">
         GROUP BY
@@ -81,6 +95,22 @@
     </select>
 
     <select id="getActivityInfoById" parameterType="java.lang.Integer" resultMap="ActivityResultMap">
+        SELECT
+        *
+        FROM
+        activity
+        LEFT OUTER JOIN activity_status ON activity.activity_status_id = activity_status.id
+        WHERE
+        activity.id = #{id}
+        AND activity_status_id = 1
+        <include refid="groupByAndOrderBySql" />
+    </select>
+
+    <!--这里有两种请求的方式，一种是通过表连接的操作，然后直接在resultMap中针对对象进行拼接，还有一种是通过association的select的方式，通过将参数传递给select的方法
+        来获取相对应的信息，然后将其填充进来的操作
+    -->
+
+    <select id="getActivityById" parameterType="java.lang.Integer" resultMap="ActivityInfoResultMap">
         SELECT
         *
         FROM

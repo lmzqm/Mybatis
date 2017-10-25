@@ -31,11 +31,11 @@ public enum SexEnum {
         this.desc = desc;
     }
 
-    @Override
-    public String toString() {
-        return "SexEnum{" +
-                "sexId=" + sexId +
-                ", desc='" + desc + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "SexEnum{" +
+//                "sexId=" + sexId +
+//                ", desc='" + desc + '\'' +
+//                '}';
+//    }
 }

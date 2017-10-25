@@ -16,6 +16,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by lmzqm on 2017/6/29.
@@ -38,10 +39,11 @@ public class MailServer {
         message.setText("测试邮件内容");
         message.setSubject("邮件主题");
         try {
-            mailSender.send(message);
+                mailSender.send(message);
         }catch (MailException e){
 
         }
+
 
     }
 

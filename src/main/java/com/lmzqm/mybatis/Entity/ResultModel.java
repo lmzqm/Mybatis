@@ -3,11 +3,12 @@ package com.lmzqm.mybatis.Entity;
 import com.lmzqm.mybatis.Enum.HttpCodeEnum;
 
 import javax.swing.plaf.PanelUI;
+import java.io.Serializable;
 
 /**
  * Created by lmzqm on 2017/7/12.
  */
-public class ResultModel {
+public class ResultModel implements Serializable{
 
     private int code;
 

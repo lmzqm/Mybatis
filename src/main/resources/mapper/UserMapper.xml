@@ -23,4 +23,53 @@
         INSERT  INTO  users(username,password,sex,nick_name) VALUES (#{userName},#{passWord},#{sex},#{nickName})
     </insert>
 
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+
+        INSERT INTO users(username,password,sex,nick_name) VALUES (#{userName,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{sex},#{nickName})
+
+    </insert>
+
+    <update id="updateUserInfo" parameterType="User">
+        UPDATE users
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password= #{password},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="nickname != null">
+                nick_name = #{nickname}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <select id="getUserLike" resultMap="UserInfoResult" parameterType="java.lang.String">
+        <bind name="pattern" value="'%'+${name}+'%'"></bind>
+        SELECT * FROM users
+        <where>
+            <if test="username != null">
+                <include refid="orderByName">
+                    <property name="name" value="username"></property>
+                </include>
+            </if>
+        </where>
+    </select>
+
+    <sql id="orderByName">
+        username LIKE ${name}
+    </sql>
+
+    <sql id="foreatchUsers">
+        <foreach collection="items" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </sql>
+
+
+
 </mapper>

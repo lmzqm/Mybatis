@@ -60,14 +60,14 @@ public class User implements Serializable{
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", passWord='" + passWord + '\'' +
-                ", sex=" + sex +
-                ", nickName='" + nickName + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", userName='" + userName + '\'' +
+//                ", passWord='" + passWord + '\'' +
+//                ", sex=" + sex +
+//                ", nickName='" + nickName + '\'' +
+//                '}';
+//    }
 }

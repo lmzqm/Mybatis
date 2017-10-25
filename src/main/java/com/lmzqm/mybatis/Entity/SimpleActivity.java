@@ -1,5 +1,7 @@
 package com.lmzqm.mybatis.Entity;
 
+import java.io.Serializable;
+
 /**
  * Created by lmzqm on 2017/7/12.
  * 展示首先的活动类别信息的实体类
@@ -14,7 +16,7 @@ package com.lmzqm.mybatis.Entity;
  *  经度  longtitude
  *  纬度 latitude
  */
-public class SimpleActivity {
+public class SimpleActivity implements Serializable{
 
     private Integer id;
 
@@ -27,6 +29,16 @@ public class SimpleActivity {
     private Integer recruitPersonNumber;
 
     private String picture;
+
+    private String desc;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     /**
      * 经度

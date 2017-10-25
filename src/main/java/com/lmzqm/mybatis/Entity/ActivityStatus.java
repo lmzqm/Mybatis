@@ -2,10 +2,12 @@ package com.lmzqm.mybatis.Entity;
 
 import io.netty.channel.sctp.nio.NioSctpServerChannel;
 
+import java.io.Serializable;
+
 /**
  * Created by lmzqm on 2017/7/10.
  */
-public class ActivityStatus {
+public class ActivityStatus  implements Serializable{
 
     private Integer id;
     private String desc;

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.BloggerMapper">
+
+    <resultMap id="BaseResultMap" type="Blogger">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="profile" jdbcType="LONGVARBINARY" property="profile"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="sign" jdbcType="VARCHAR" property="sign"/>
+        <result column="imageurl" jdbcType="VARCHAR" property="imgUrl"/>
+    </resultMap>
+
+    <insert id="addBlogger" parameterType="Blogger" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO
+        t_blogger(id,username,password,profile,nick_name,sign,imageurl)
+        VALUES
+        (#{id,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},
+          #{password},#{profile},#{nickName},#{sign},#{imgUrl})
+    </insert>
+
+
+    <!--批量更新数据或者批量删除数据-->
+    <update id="updateUsersWorkTime" parameterType="java.util.List">
+        UPDATE t_blogger
+        SET
+        password = #{password}
+        where id INTO
+        <foreach collection="users" open="(" separator="," close=")" item="userid" index="index">
+            #{userid}
+        </foreach>
+    </update>
+
+
+
+
+</mapper>

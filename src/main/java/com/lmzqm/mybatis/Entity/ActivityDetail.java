@@ -1,11 +1,12 @@
 package com.lmzqm.mybatis.Entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lmzqm on 2017/7/13.
  */
-public class ActivityDetail extends Activity {
+public class ActivityDetail extends Activity{
 
     private ActivityStatus activityStatus;
 

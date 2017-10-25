@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.QuestionMapper">
+
+    <resultMap id="BaseResultMap" type="Question">
+        <id property="questionId" column="question_id" jdbcType="INTEGER"/>
+        <result property="title" column="question_title" jdbcType="VARCHAR"/>
+        <result property="options" column="question_options" jdbcType="VARCHAR"/>
+        <result property="current" column="question_current" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+
+    <select id="selectQuestionById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM questions
+        WHERE question_id = #(id)
+    </select>
+
+
+
+    <insert id="addNewQuestions" useGeneratedKeys="true" keyProperty="questionId" parameterType="Question">
+        INSERT INTO questions (
+          question_title,
+          question_options,
+          question_current
+        )
+        VALUES (
+          #(title),
+          #(options),
+          #(current)
+        )
+    </insert>
+
+    <select id="getQuestionListByArray" parameterType="java.util.List" resultMap="BaseResultMap">
+
+        SELECT * FROM questions
+        WHERE question_id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        ORDER BY find_in_set(question_id,'2,1')
+    </select>
+
+</mapper>

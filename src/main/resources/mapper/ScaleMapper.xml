@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.ScaleMapper">
+
+    <resultMap id="BaseResultMap" type="Scale">
+        <id column="scale_id" jdbcType="INTEGER" property="scaleId"/>
+        <result column="scale_title" jdbcType="VARCHAR" property="title"/>
+        <result column="scale_type" jdbcType="INTEGER" property="type"/>
+        <result column="scale_desc" jdbcType="VARCHAR" property="desc"/>
+        <result column="scale_questions" jdbcType="VARCHAR" property="questions"/>
+        <result column="scale_status" jdbcType="INTEGER" property="status"/>
+        <result column="scale_test_persons" jdbcType="INTEGER" property="testPersons"/>
+        <association property="typeInfo" javaType="ScaleType" resultMap="TypeBaseResultMap"/>
+
+    </resultMap>
+
+    <resultMap id="TypeBaseResultMap" type="ScaleType">
+        <id property="id" jdbcType="INTEGER" column="type_id"/>
+        <result property="desc" jdbcType="VARCHAR" column="type_desc"/>
+    </resultMap>
+
+
+
+    <resultMap id="QuestionsResultMap" type="ScaleDetail">
+        <collection property="questions" resultMap="Questions">
+
+        </collection>
+    </resultMap>
+
+    <sql id="selectWithStatus">
+        AND scale_status = 1
+    </sql>
+
+    <select id="getScaleInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT  *
+        FROM scale
+        LEFT JOIN scale_type_t ON scale_type_t.type_id = scale.scale_type
+        WHERE scale_id = #{id}
+        <include refid="selectWithStatus"/>
+    </select>
+
+    <insert id="addNewScaleInfo" useGeneratedKeys="true" keyProperty="scaleId" parameterType="Scale">
+        INSERT INTO scale(
+          scale_title,
+          scale_type,
+          scale_desc,
+          scale_status,
+          scale_questions
+        ) VALUES (
+          #{title,jdbcType=VARCHAR},
+          #{type,jdbcType=INTEGER},
+          #{desc,jdbcType=VARCHAR},
+          #{status,jdbcType=INTEGER},
+          #{questions,jdbcType=VARCHAR}
+        );
+    </insert>
+
+    <select id="getScaleList" resultMap="BaseResultMap">
+
+        SELECT  *
+        FROM scale
+        LEFT JOIN scale_type_t ON scale_type_t.type_id = scale.scale_type
+        <where>
+            <include refid="selectWithStatus"/>
+        </where>
+
+    </select>
+
+    <update id="addNewTestPersonsById" parameterType="java.lang.Integer">
+        UPDATE scale SET scale_test_persons += 1
+        WHERE scale_id = #{id}
+    </update>
+
+</mapper>

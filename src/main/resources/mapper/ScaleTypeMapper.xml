@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.ScaleTypeMapper">
+
+    <resultMap id="BaseResultMap" type="ScaleType">
+        <id property="id" jdbcType="INTEGER" column="type_id"/>
+        <result property="desc" jdbcType="VARCHAR" column="type_desc"/>
+    </resultMap>
+
+    <insert id="addNewType" parameterType="ScaleType" useGeneratedKeys="true" keyProperty="id">
+
+        INSERT INTO scale_type_t(
+          type_desc
+        )VALUES (
+          #{desc,jdbcType=VARCHAR}
+        )
+
+    </insert>
+
+    <select id="getTypeInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM scale_type_t
+        WHERE type_id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

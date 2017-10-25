@@ -1,8 +1,10 @@
 package com.lmzqm.mybatis.Controller;
 
 import org.apache.catalina.LifecycleState;
+import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 
@@ -22,6 +25,9 @@ import java.util.List;
 public class FileUploadController {
 
     private Logger logger = LoggerFactory.getLogger(FileUploadController.class);
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Value("${upload.filename}")
     private String uploadFile;
@@ -55,14 +61,19 @@ public class FileUploadController {
 
         if(!file.isEmpty()){
             try {
-                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(file.getOriginalFilename())));
+                //文件的保存路径
+//                String filePath = request.getSession().getServletContext().getRealPath("/")+"upload/"+file.getOriginalFilename();
+//                file.transferTo(new File(filePath));
+
+                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(uploadFile+file.getOriginalFilename())));
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                return "上传失败"+e.getLocalizedMessage();
-            } catch (IOException e) {
+                return "上传失败" + e.getLocalizedMessage();
+            }
+            catch (IOException e) {
                 e.printStackTrace();
                 return "上传失败"+e.getLocalizedMessage();
             }
@@ -80,11 +91,9 @@ public class FileUploadController {
         MultipartFile file = null;
         BufferedOutputStream stream = null;
 
-        for (int i= 0;i<files.size();i++){
-            file = files.get(i);
+            for (int i= 0;i<files.size();i++){
+                file = files.get(i);
             if(!file.isEmpty()){
-
-
                 try {
                     byte[] bytes = file.getBytes();
                     stream = new BufferedOutputStream(new FileOutputStream(new File(file.getOriginalFilename())));
@@ -105,6 +114,20 @@ public class FileUploadController {
 
         }
         return "上传成功";
+    }
+
+
+    @GetMapping("/download")
+    public void downLoadFile(HttpServletResponse res) throws IOException{
+        String fileName = "weixin.jpg";
+        res.setHeader("content-type","application/octet-stream");
+        res.setContentType("application/octet-stream");
+        res.setHeader("Content-Disposition","attachment;filename="+fileName);
+        ClassPathResource resource = new ClassPathResource("static/images/weixin.jpg");
+        File file = resource.getFile();
+        FileOutputStream fos = new FileOutputStream(file);
+        res.setContentLengthLong(file.length());
+        fos.close();
     }
 
 }

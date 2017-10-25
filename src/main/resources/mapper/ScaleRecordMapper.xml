@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.ScaleRecordMapper">
+
+    <resultMap id="BaseResultMap" type="ScaleRecord">
+        <id property="id" jdbcType="INTEGER" column="recordId"/>
+        <result property="scaleId" jdbcType="INTEGER" column="scaleid"/>
+        <result property="scaleScord" jdbcType="INTEGER" column="score"/>
+        <result property="result" jdbcType="VARCHAR" column="result"/>
+        <result property="recordTime" jdbcType="TIMESTAMP" column="record_time"/>
+        <result property="results" jdbcType="VARCHAR" column="datas"/>
+        <result property="userId" jdbcType="INTEGER" column="userid"/>
+    </resultMap>
+
+    <select id="selectRecordById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM scale_record
+        WHERE recordid = #{id}
+    </select>
+
+    <insert id="addNewRecordInfo" useGeneratedKeys="true" keyProperty="recordid" parameterType="ScaleRecord">
+        INSERT INTO scale_record (
+          scaleid,
+          score,
+          result,
+          record_time,
+          datas,
+          userid
+        )
+        VALUES (
+          #{scaleId,jdbcType=INTEGER},
+          #{scaleScord,jdbcType=INTEGER},
+          #{result,jdbcType=VARCHAR},
+          #{recordTime,jdbcType=TIMESTAMP},
+          #{results,jdbcType=VARCHAR},
+          #{userId,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <select id="getRecordListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM scale_record
+        WHERE userid = #{userId}
+    </select>
+
+</mapper>

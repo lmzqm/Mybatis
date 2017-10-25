@@ -26,10 +26,10 @@ public class ScheduleTask {
      */
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(fixedDelay = 5000)
-    public void reportCurrentTime(){
-        System.out.println("现在的时间："+dateFormat.format(new Date()));
-    }
+//    @Scheduled(fixedDelay = 5000)
+//    public void reportCurrentTime(){
+//        System.out.println("现在的时间："+dateFormat.format(new Date()));
+//    }
 
 
     @Scheduled(cron = "0 30 15 * * ?")

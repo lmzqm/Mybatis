@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.BlogMapper">
+
+    <resultMap id="BaseResultMap" type="Blog">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="LONGVARBINARY" property="content"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="bloger_id" jdbcType="INTEGER" property="bloggerId"/>
+    </resultMap>
+
+    <resultMap id="BloggerResultMap" type="Blogger">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="profile" jdbcType="LONGVARBINARY" property="profile"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="sign" jdbcType="VARCHAR" property="sign"/>
+        <result column="imageurl" jdbcType="VARCHAR" property="imgUrl"/>
+    </resultMap>
+
+    <resultMap id="DetailResultMap" type="BlogDetail" extends="BaseResultMap">
+        <association property="blogger" javaType="Blogger"  resultMap="BloggerResultMap">
+        </association>
+    </resultMap>
+
+    <resultMap id="commentResultMap" type="CommentDetail">
+     <id column="c_id" property="id"/>
+     <result column="blog_id" property="blogId"/>
+     <result column="timestamp" property="timeStamp"/>
+     <result column="desc" property="desc"/>
+     <result column="user_id" property="userId"/>
+     <result column="time" property="timeStamp"/>
+     <association property="blogger" javaType="Blogger" resultMap="BloggerResultMap"/>
+    </resultMap>
+
+    <sql id="selectFromId">
+        WHERE id = ${id}
+    </sql>
+
+    <sql id="orderByTime">
+        ORDER BY time DESC
+    </sql>
+
+    <insert id="addNewBlog" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        t_blog(title,content,time,blogger_id)
+        VALUES
+        (#{title,jdbcType=VARCHAR},#{content,jdbcType=LONGVARBINARY},#{time,jdbcType=TIMESTAMP},#{bloggerId,jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateBlog" parameterType="Blog">
+        UPDATE t_blog
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARBINARY}
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP}
+            </if>
+            <if test="bloggerId != null">
+                blogger_id = #{bloggerId,jdbcType=INTEGER}
+            </if>
+        </set>
+        <include refid="selectFromId"></include>
+    </update>
+
+    <select id="getBlogList" resultMap="BaseResultMap">
+
+        SELECT
+        *
+        FROM
+        t_blog
+        <include refid="orderByTime"></include>
+
+    </select>
+
+    <select id="getBlogDatail" parameterType="java.lang.Integer" resultMap="DetailResultMap">
+        SELECT
+         *
+        FROM t_blog b
+        LEFT JOIN t_blogger br on b.bloger_id = br.id
+        WHERE b.id = #{id}
+    </select>
+
+    <select id="getCommentList" parameterType="java.lang.Integer" resultMap="commentResultMap">
+        SELECT * FROM t_comment
+        LEFT JOIN t_blogger ON t_comment.user_id = t_blogger.id
+        WHERE t_comment.blog_id = #{id}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

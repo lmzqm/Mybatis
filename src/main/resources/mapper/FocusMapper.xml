@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmzqm.mybatis.Mapper.FocusMapper">
+
+    <resultMap id="BaseResultMap" type="Focus">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="focus_id" jdbcType="INTEGER" property="focusId"/>
+        <result column="focus_time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="focus_state" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="UserInfo">
+        <id column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl"/>
+    </resultMap>
+
+    <resultMap id="DetailResultMap" type="FocusDetail" extends="UserResultMap">
+        <result column="focus_state" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+
+    <resultMap id="DetailListMap" type="FocusDetailList">
+        <collection property="details" ofType="FocusDetailList" resultMap="DetailResultMap"/>
+    </resultMap>
+
+    <select id="getFocusList" parameterType="java.lang.Integer" resultMap="DetailListMap">
+        SELECT *
+        FROM focus LEFT JOIN user_info ON focus.focus_id = user_info.user_id
+        WHERE focus.user_id = #{id, javaType=INTEGER}
+    </select>
+
+    <select id="getFocusedList" parameterType="java.lang.Integer" resultMap="DetailListMap">
+        SELECT *
+        FROM focus LEFT JOIN user_info ON focus.user_id = user_info.user_id
+        WHERE focus.focus_id = #{id, javaType=INTEGER}
+    </select>
+
+    <insert id="addFocus" parameterType="Focus" useGeneratedKeys="true" keyProperty="user_id">
+        INSERT INTO focus(user_id,focus_id,focus_time,focus_status)
+        VALUES (
+        #{userId,jdbcType=INTEGER},
+        #{focusId,jdbcType=INTEGER},
+        new(),
+        1
+        )
+    </insert>
+
+
+</mapper>

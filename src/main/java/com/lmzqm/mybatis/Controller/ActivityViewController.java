@@ -3,6 +3,9 @@ package com.lmzqm.mybatis.Controller;
 import com.lmzqm.mybatis.Entity.*;
 import com.lmzqm.mybatis.Enum.HttpCodeEnum;
 import com.lmzqm.mybatis.Server.ActivityServer;
+import com.lmzqm.mybatis.Server.UserServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +22,16 @@ import java.util.List;
 @RequestMapping(value = "/activity")
 public class ActivityViewController {
 
+
     @Autowired
     private ActivityServer activityServer;
+
+    @Autowired
+    private UserServer userServer;
+
+    private static final Logger logger = LoggerFactory.getLogger(ActivityViewController.class);
+
+
 
     @GetMapping("/status")
     ErrorInfo<Object> getAllActivityStatus(){
@@ -56,6 +67,8 @@ public class ActivityViewController {
         errorInfo.setCode(code.getCode());
         errorInfo.setMessage(code.getDesc());
 
+
+
         return errorInfo;
     }
 
@@ -82,9 +95,6 @@ public class ActivityViewController {
         if(status.getId() == null){
             return new ResponseEntity<>(ResultModel.error(HttpCodeEnum.FAIL), HttpStatus.BAD_REQUEST);
         }
-
-
-
         Integer index = activityServer.updateStatusByStatus(status);
         if(index == -1){
 
@@ -92,7 +102,6 @@ public class ActivityViewController {
         }
 
         return new ResponseEntity<>(ResultModel.ok(),HttpStatus.OK);
-
     }
 
     @GetMapping("/status/add")
@@ -115,6 +124,8 @@ public class ActivityViewController {
     }
 
     @GetMapping("/home/{status}")
+//    这里是跨域的操作 如果发现不能访问的话就使用这个来进行跨域的操作
+    @CrossOrigin(methods = {RequestMethod.GET,RequestMethod.POST},origins = "*")
     public ResponseEntity<?> getHomeActivitysByStatus(@PathVariable("status") Integer status){
 
         if(status == null || status == 0){
@@ -127,6 +138,7 @@ public class ActivityViewController {
     }
 
     @GetMapping("/{id}")
+    @CrossOrigin(methods = RequestMethod.GET,origins = "*")
     public ResponseEntity<?> getActivityInfoById(@PathVariable("id") Integer id){
 
         ActivityDetail info = activityServer.getActivityInfoById(id);
@@ -136,6 +148,27 @@ public class ActivityViewController {
         return new ResponseEntity<Object>(ResultModel.ok(info),HttpStatus.OK);
     }
 
+    @GetMapping("/focus/{id}")
+    public ResponseEntity<?> getUserFocusList(@PathVariable("id") Integer id){
+        if(id == null){
+            return new ResponseEntity<Object>(ResultModel.error(HttpCodeEnum.FAIL),HttpStatus.NOT_FOUND);
+        }
+        List<FocusDetail> list =  userServer.getFocusDetailList(id);
+
+        List<String> strList = new ArrayList<>();
+
+        return new ResponseEntity<Object>(ResultModel.ok(list),HttpStatus.OK);
+    }//getFocusedList
+
+    @GetMapping("/focused/{id}")
+    public ResponseEntity<?> getUserFocusedList(@PathVariable("id") Integer id){
+        if(id == null){
+            return new ResponseEntity<Object>(ResultModel.error(HttpCodeEnum.FAIL),HttpStatus.NOT_FOUND);
+        }
+        List<FocusDetail> list =  userServer.getFocusedDetailList(id);
+
+        return new ResponseEntity<Object>(ResultModel.ok(list),HttpStatus.OK);
+    }//getFocusedList
 
 
 

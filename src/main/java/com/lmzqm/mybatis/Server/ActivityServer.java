@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -95,17 +97,29 @@ public class ActivityServer {
         Integer index = 0;
         logger.info("the status is"+status.toString());
 
+       Runnable runnable = ()->System.out.println("Hello world");
+
+       Thread[] threads = new Thread[10];
+       for (int i = 0;i<10;i++){
+           threads[i] = new Thread(runnable);
+       }
+
+        for ( Thread t: threads ) {
+            t.start();
+        }
+
         try {
 
             index = statusMapper.updateStatusByPrimaryKey(status);
 
         }catch (Exception e){
 
-           index = -1;
+            index = -1;
 
         }finally {
             return index;
         }
+
     }
 
     /**
@@ -138,6 +152,9 @@ public class ActivityServer {
      */
     public List<SimpleActivity> getAllActiveActivity( Integer status){
 
+//        SimpleDateFormat format = new SimpleDateFormat("YYYY-mm-dd");
+//        String date = format.format(new Date());
+
         try {
             List<SimpleActivity> activitys = activityMapper.selectHomeActivitys(status);
             if (activitys.isEmpty()){
@@ -150,6 +167,11 @@ public class ActivityServer {
         }
     }
 
+    /**
+     * 通过id来获取活动的详情
+     * @param id 活动的id
+     * @return 返回活动的详情
+     */
     public ActivityDetail getActivityInfoById(Integer id){
 
         try {
@@ -162,12 +184,4 @@ public class ActivityServer {
         }
 
     }
-
-
-
-
-
-
-
-
 }

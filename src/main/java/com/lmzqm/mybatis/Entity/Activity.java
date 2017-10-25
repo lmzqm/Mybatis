@@ -1,11 +1,12 @@
 package com.lmzqm.mybatis.Entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by lmzqm on 2017/7/10.
  */
-public class Activity {
+public class Activity implements Serializable {
 
     private Integer id;
     private String addressProvice;

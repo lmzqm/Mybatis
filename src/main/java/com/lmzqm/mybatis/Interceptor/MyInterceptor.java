@@ -1,5 +1,7 @@
 package com.lmzqm.mybatis.Interceptor;
 
+import com.lmzqm.mybatis.Annortation.Authorization;
+import com.lmzqm.mybatis.Exception.MyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * Created by lmzqm on 2017/6/30.
@@ -17,22 +21,28 @@ public class MyInterceptor implements HandlerInterceptor {
     private static Logger logger = LoggerFactory.getLogger(MyInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws MyException {
 
         /**
          *  只有返回true 才会继续向下执行，返回false取消当前请求
          */
         logger.info("在请求处理之前调用Handle方法调用前");
 
-        Integer type = (Integer) httpServletRequest.getSession().getAttribute("userTYpe");
-        if (type == 1){
-            return true;
-        }else{
-            httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
-            return false;
-        }
+        logger.info(httpServletRequest.toString());
 
-//        return true;
+//        Integer type = (Integer) httpServletRequest.getSession().getAttribute("userTYpe");
+//        if (type == 1){
+//            return true;
+//        }else{
+//            httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
+////            httpServletResponse.sendError(HttpStatus.NOT_FOUND.value(),HttpStatus.NOT_FOUND.getReasonPhrase());
+//            return false;
+//        }
+
+
+
+
+        return true;
 
     }
 
